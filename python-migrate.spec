@@ -4,7 +4,7 @@
 
 Name: python-migrate
 Version: 0.4.4
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -13,6 +13,8 @@ URL: http://code.google.com/p/%{srcname}/
 Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
 # Fix a test when migrate is not installed.  Applied upstream.
 Patch0: python-migrate-shell-test.patch
+# Local patch to disable py.test.  Needed until py.test is in Fedora.
+Patch1: python-migrate-disable-pytest.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -30,6 +32,7 @@ atabase change sets and database repository versioning.
 %prep
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .env
+%patch1 -p1 -b .pytest
 
 %build
 %{__python} setup.py build
@@ -56,6 +59,9 @@ atabase change sets and database repository versioning.
 %{python_sitelib}/*
 
 %changelog
+* Thu Jul 17 2008 Toshio Kuratomi <toshio@fedoraproject.org> 0.4.4-4
+- Disable py.test so we don't try to download it during build.
+
 * Tue Jul 15 2008 Toshio Kuratomi <toshio@fedoraproject.org> 0.4.4-3
 - Rename binary to sqlalchemy-migrate to avoid potential filename clashes.
   (Queried upstream but the change is only in Fedora).  Noted that

@@ -1,0 +1,13 @@
+Index: sqlalchemy-migrate-0.4.4/setup.py
+===================================================================
+--- sqlalchemy-migrate-0.4.4.orig/setup.py
++++ sqlalchemy-migrate-0.4.4/setup.py
+@@ -20,7 +20,7 @@ Migrate extends SQLAlchemy to have datab
+ """,
+ 
+     install_requires = ['sqlalchemy >= 0.3.10'],
+-    setup_requires = ['py >= 0.9.0-beta'],
++    setup_requires = [],
+     dependency_links = [
+         "http://codespeak.net/download/py/",
+     ],

@@ -3,8 +3,8 @@
 %define srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.4.4
-Release: 4%{?dist}
+Version: 0.4.5
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -59,6 +59,9 @@ atabase change sets and database repository versioning.
 %{python_sitelib}/*
 
 %changelog
+* Thu Jul 17 2008 Toshio Kuratomi <toshio@fedoraproject.org> 0.4.5-1
+- New upstream
+
 * Thu Jul 17 2008 Toshio Kuratomi <toshio@fedoraproject.org> 0.4.4-4
 - Disable py.test so we don't try to download it during build.
 

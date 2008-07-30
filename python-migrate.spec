@@ -4,7 +4,7 @@
 
 Name: python-migrate
 Version: 0.4.5
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -12,7 +12,11 @@ License: MIT
 URL: http://code.google.com/p/%{srcname}/
 Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
 # Local patch to disable py.test.  Needed until py.test is in Fedora.
-Patch1: python-migrate-disable-pytest.patch
+Patch0: python-migrate-disable-pytest.patch
+# Patch sent upstream to generate a script for the repository upgrade script
+Patch1: python-migrate-migrate_repository.patch
+# Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
+Patch2: python-migrate-sqlalchemy-migrate.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -20,6 +24,7 @@ BuildArch: noarch
 BuildRequires: python-devel
 BuildRequires: python-setuptools-devel
 Requires: python-sqlalchemy >= 0.3.10
+Requires: python-setuptools
 
 %description
 Schema migration tools for SQLAlchemy designed to support an agile approach
@@ -29,7 +34,9 @@ atabase change sets and database repository versioning.
 
 %prep
 %setup -q -n %{srcname}-%{version}
-%patch1 -p1 -b .pytest
+%patch0 -p1 -b .pytest
+%patch1 -p0 -b .repomigrate
+%patch2 -p1 -b .rename
 
 %build
 %{__python} setup.py build
@@ -37,7 +44,6 @@ atabase change sets and database repository versioning.
 %install
 %{__rm} -rf %{buildroot}
 %{__python} setup.py install --skip-build --root %{buildroot}
-%{__mv} %{buildroot}%{_bindir}/migrate %{buildroot}%{_bindir}/sqlalchemy-migrate
 
 %clean
 %{__rm} -rf %{buildroot}
@@ -52,10 +58,14 @@ atabase change sets and database repository versioning.
 %files
 %defattr(-,root,root,-)
 %doc README CHANGELOG docs/
-%{_bindir}/sqlalchemy-migrate
+%{_bindir}/*
 %{python_sitelib}/*
 
 %changelog
+* Tue Jul 29 2008 Toshio Kuratomi <toshio@fedoraproject.org> 0.4.5-3
+- Patch to generate a script for the repository migrate script.
+- Move the script rename into a patch to setup.py.
+
 * Thu Jul 17 2008 Toshio Kuratomi <toshio@fedoraproject.org> 0.4.5-2
 - Remove patches that are merged upstream.
 

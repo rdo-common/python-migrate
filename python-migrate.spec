@@ -4,7 +4,7 @@
 
 Name: python-migrate
 Version: 0.4.5
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -62,6 +62,9 @@ atabase change sets and database repository versioning.
 %{python_sitelib}/*
 
 %changelog
+* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.4.5-4
+- Rebuild for Python 2.6
+
 * Tue Jul 29 2008 Toshio Kuratomi <toshio@fedoraproject.org> 0.4.5-3
 - Patch to generate a script for the repository migrate script.
 - Move the script rename into a patch to setup.py.

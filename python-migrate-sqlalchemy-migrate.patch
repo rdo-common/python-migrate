@@ -1,8 +1,8 @@
-Index: sqlalchemy-migrate-0.4.5/setup.py
+Index: sqlalchemy-migrate-0.5.1.dev-r479/setup.py
 ===================================================================
---- sqlalchemy-migrate-0.4.5.orig/setup.py
-+++ sqlalchemy-migrate-0.4.5/setup.py
-@@ -34,8 +34,8 @@ Migrate extends SQLAlchemy to have datab
+--- sqlalchemy-migrate-0.5.1.dev-r479.orig/setup.py
++++ sqlalchemy-migrate-0.5.1.dev-r479/setup.py
+@@ -31,8 +31,8 @@ Migrate extends SQLAlchemy to have datab
  
      entry_points = """
      [console_scripts]
@@ -11,5 +11,5 @@ Index: sqlalchemy-migrate-0.4.5/setup.py
 +    sqlalchemy-migrate = migrate.versioning.shell:main
 +    sqlalchemy-migrate-repository = migrate.versioning.migrate_repository:main
      """,
-     test_suite = "py.test.cmdline.main",
+     test_suite = "nose.collector",
  )

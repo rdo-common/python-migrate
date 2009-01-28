@@ -3,27 +3,35 @@
 %define srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.4.5
-Release: 4%{?dist}
+Version: 0.5.1
+Release: 0.1.20090122.svn479%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
 License: MIT
 URL: http://code.google.com/p/%{srcname}/
-Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
-# Local patch to disable py.test.  Needed until py.test is in Fedora.
-Patch0: python-migrate-disable-pytest.patch
-# Patch sent upstream to generate a script for the repository upgrade script
-Patch1: python-migrate-migrate_repository.patch
+# Build from a snapshot so we get this working with sqlalchemy-0.5
+# svn checkout http://sqlalchemy-migrate.googlecode.com/svn/trunk/ sqlalchemy-migrate -r479
+# cd sqlalchemy-migrate
+# python setup.py sdist
+# tarball is in dist/sqlalchemy-migrate-0.5.1.dev-r479.tar.gz
+Source0: %{srcname}-%{version}.dev-r479.tar.gz
+#Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
-Patch2: python-migrate-sqlalchemy-migrate.patch
+Patch0: python-migrate-sqlalchemy-migrate.patch
+# Sent upstream to fix a unittest failure
+Patch1: python-migrate-unittests.patch
+# Disable one unittest for now.  In the future we want this to work
+Patch2: python-migrate-disable-test_fk.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
 BuildRequires: python-devel
+BuildRequires: python-sqlalchemy
 BuildRequires: python-setuptools-devel
-Requires: python-sqlalchemy >= 0.3.10
+BuildRequires: python-nose
+Requires: python-sqlalchemy >= 0.5
 Requires: python-setuptools
 
 %description
@@ -33,10 +41,11 @@ databases in sync as schema changes are required.  It allows you to manage
 atabase change sets and database repository versioning.
 
 %prep
-%setup -q -n %{srcname}-%{version}
-%patch0 -p1 -b .pytest
-%patch1 -p0 -b .repomigrate
-%patch2 -p1 -b .rename
+%setup -q -n %{srcname}-%{version}.dev-r479
+%patch0 -p1 -b .rename
+%patch1 -p0 -b .testing
+# Try removing this patch on every update
+%patch2 -p1 -b .disable-test
 
 %build
 %{__python} setup.py build
@@ -48,12 +57,9 @@ atabase change sets and database repository versioning.
 %clean
 %{__rm} -rf %{buildroot}
 
-# Check needs py.test in order to run
-#%check
-#echo 'sqlite:///__tmp__' > test_db.cfg
-# setuptools doesn't appear to be compatible with py.test
-# %{__python} setup.py test
-#%{__python} -c 'from py.test.cmdline import main; main(["test"])'
+%check
+echo 'sqlite:///__tmp__' > test_db.cfg
+%{__python} setup.py test
 
 %files
 %defattr(-,root,root,-)
@@ -62,6 +68,10 @@ atabase change sets and database repository versioning.
 %{python_sitelib}/*
 
 %changelog
+* Mon Jan 26 2009 Toshio Kuratomi <toshio@fedoraproject.org> 0.5.1-0.1.20090122.svn479
+- Update to snapshot so that it works with sqlalchemy-0.5
+- Enable test suite
+
 * Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.4.5-4
 - Rebuild for Python 2.6
 

@@ -4,7 +4,7 @@
 
 Name: python-migrate
 Version: 0.5.1.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -23,6 +23,7 @@ BuildRequires: python-devel
 BuildRequires: python-sqlalchemy
 BuildRequires: python-setuptools-devel
 BuildRequires: python-nose
+BuildRequires: python-sphinx
 Requires: python-sqlalchemy >= 0.5
 Requires: python-setuptools
 
@@ -59,6 +60,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %{python_sitelib}/*
 
 %changelog
+* Wed Feb 11 2009 Toshio Kuratomi <toshio@fedoraproject.org> 0.5.1.2-2
+- Add BR on python-sphinx
+
 * Wed Feb 11 2009 Toshio Kuratomi <toshio@fedoraproject.org> 0.5.1.2-1
 - Update to 0.5.1.2 release with official support for SA-0.5
 - Remove patches merged upstream

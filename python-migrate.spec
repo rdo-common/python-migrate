@@ -3,8 +3,8 @@
 %define srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.5.1.2
-Release: 3%{?dist}
+Version: 0.5.3
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -13,8 +13,6 @@ URL: http://code.google.com/p/%{srcname}/
 Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
 Patch0: python-migrate-sqlalchemy-migrate.patch
-# Disable one unittest for now.  In the future we want this to work
-Patch1: python-migrate-disable-test_fk.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -36,8 +34,6 @@ atabase change sets and database repository versioning.
 %prep
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .rename
-# Try removing this patch on every update
-%patch1 -p1 -b .disable-test
 
 %build
 %{__python} setup.py build
@@ -60,6 +56,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %{python_sitelib}/*
 
 %changelog
+* Thu Apr 16 2009 Toshio Kuratomi <toshio@fedoraproject.org> 0.5.3-1
+- Update to new bugfix release.
+
 * Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.5.1.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 

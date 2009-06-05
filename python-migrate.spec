@@ -4,7 +4,7 @@
 
 Name: python-migrate
 Version: 0.5.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -13,6 +13,7 @@ URL: http://code.google.com/p/%{srcname}/
 Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
 Patch0: python-migrate-sqlalchemy-migrate.patch
+Patch1: python-migrate-py2.4-import.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -22,8 +23,15 @@ BuildRequires: python-sqlalchemy
 BuildRequires: python-setuptools-devel
 BuildRequires: python-nose
 BuildRequires: python-sphinx
+
 Requires: python-sqlalchemy >= 0.5
 Requires: python-setuptools
+
+%if 0%{?fedora} <= 6
+BuildRequires: python-sqlite2
+Requires:      python-sqlite2
+%endif
+
 
 %description
 Schema migration tools for SQLAlchemy designed to support an agile approach
@@ -34,6 +42,7 @@ atabase change sets and database repository versioning.
 %prep
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .rename
+%patch1 -p0 -b .import
 
 %build
 %{__python} setup.py build
@@ -56,6 +65,11 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %{python_sitelib}/*
 
 %changelog
+* Mon Jun 01 2009 Luke Macken <lmacken@redhat.com> 0.5.3-2
+- Add python-migrate-py2.4-import.patch, which makes the use
+  of __import__ work on Python 2.4
+- Add python-sqlite2 to the build requirements on FC6 and below
+
 * Thu Apr 16 2009 Toshio Kuratomi <toshio@fedoraproject.org> 0.5.3-1
 - Update to new bugfix release.
 

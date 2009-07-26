@@ -4,7 +4,7 @@
 
 Name: python-migrate
 Version: 0.5.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -65,6 +65,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %{python_sitelib}/*
 
 %changelog
+* Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.5.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Mon Jun 01 2009 Luke Macken <lmacken@redhat.com> 0.5.3-2
 - Add python-migrate-py2.4-import.patch, which makes the use
   of __import__ work on Python 2.4

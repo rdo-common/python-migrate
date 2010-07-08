@@ -1,10 +1,12 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%if !(0%{?fedora} > 12 || 0%{?rhel} > 5)
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%endif
 
-%define srcname sqlalchemy-migrate
+%global srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.5.3
-Release: 3%{?dist}
+Version: 0.5.4
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -12,8 +14,7 @@ License: MIT
 URL: http://code.google.com/p/%{srcname}/
 Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
-Patch0: python-migrate-sqlalchemy-migrate.patch
-Patch1: python-migrate-py2.4-import.patch
+Patch0: python-migrate-0.5.4-rename.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -23,11 +24,13 @@ BuildRequires: python-sqlalchemy
 BuildRequires: python-setuptools-devel
 BuildRequires: python-nose
 BuildRequires: python-sphinx
+BuildRequires: python-decorator
 
 Requires: python-sqlalchemy >= 0.5
 Requires: python-setuptools
+Requires: python-decorator
 
-%if 0%{?fedora} <= 6
+%if 0%{?rhel} && 0%{?rhel} < 6
 BuildRequires: python-sqlite2
 Requires:      python-sqlite2
 %endif
@@ -42,7 +45,6 @@ atabase change sets and database repository versioning.
 %prep
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .rename
-%patch1 -p0 -b .import
 
 %build
 %{__python} setup.py build
@@ -65,6 +67,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %{python_sitelib}/*
 
 %changelog
+* Tue Apr 20 2010 Martin Bacovsky <mbacovsk@redhat.com> - 0.5.4-1
+- Update to new bugfix release 
+
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.5.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 

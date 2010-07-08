@@ -1,7 +1,7 @@
-diff -up sqlalchemy-migrate-0.5.3/setup.py.bak sqlalchemy-migrate-0.5.3/setup.py
---- sqlalchemy-migrate-0.5.3/setup.py.bak	2009-04-16 10:52:18.000000000 -0700
-+++ sqlalchemy-migrate-0.5.3/setup.py	2009-04-16 10:52:43.000000000 -0700
-@@ -40,8 +40,8 @@ Migrate extends SQLAlchemy to have datab
+diff -up sqlalchemy-migrate-0.5.4/setup.py.bak sqlalchemy-migrate-0.5.4/setup.py
+--- sqlalchemy-migrate-0.5.4/setup.py.bak	2010-04-13 17:48:58.007206349 -0400
++++ sqlalchemy-migrate-0.5.4/setup.py	2010-04-13 17:49:38.058331216 -0400
+@@ -41,8 +41,8 @@ Migrate extends SQLAlchemy to have datab
  
      entry_points = """
      [console_scripts]
@@ -11,4 +11,4 @@ diff -up sqlalchemy-migrate-0.5.3/setup.py.bak sqlalchemy-migrate-0.5.3/setup.py
 +    sqlalchemy-migrate-repository = migrate.versioning.migrate_repository:main
      """,
      test_suite = "nose.collector",
-     tests_require = test_requirements,
+ )

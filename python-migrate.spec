@@ -6,7 +6,7 @@
 
 Name: python-migrate
 Version: 0.5.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -67,6 +67,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %{python_sitelib}/*
 
 %changelog
+* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 0.5.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Tue Apr 20 2010 Martin Bacovsky <mbacovsk@redhat.com> - 0.5.4-1
 - Update to new bugfix release 
 

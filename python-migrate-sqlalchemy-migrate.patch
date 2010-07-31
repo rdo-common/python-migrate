@@ -1,8 +1,9 @@
-diff -up sqlalchemy-migrate-0.5.4/setup.py.bak sqlalchemy-migrate-0.5.4/setup.py
---- sqlalchemy-migrate-0.5.4/setup.py.bak	2010-04-13 17:48:58.007206349 -0400
-+++ sqlalchemy-migrate-0.5.4/setup.py	2010-04-13 17:49:38.058331216 -0400
-@@ -41,8 +41,8 @@ Migrate extends SQLAlchemy to have datab
- 
+Index: setup.py
+===================================================================
+--- setup.py
++++ setup.py	2010-07-31 23:40:30.923637842 +0200
+@@ -32,8 +32,8 @@
+     license = "MIT",
      entry_points = """
      [console_scripts]
 -    migrate = migrate.versioning.shell:main

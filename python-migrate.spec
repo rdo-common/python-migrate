@@ -13,8 +13,10 @@ Group: Development/Languages
 License: MIT
 URL: http://code.google.com/p/%{srcname}/
 Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
+# Patch to update to new scripttest API submitted upstream
+Patch0: migrate-scripttest-update.patch
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
-Patch0: python-migrate-sqlalchemy-migrate.patch
+Patch1: python-migrate-sqlalchemy-migrate.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -30,7 +32,7 @@ BuildRequires: python-decorator
 BuildRequires: python-scripttest
 BuildRequires: python-tempita
 
-Requires: python-sqlalchemy >= 0.5
+Requires: python-sqlalchemy >= 0.6
 Requires: python-setuptools
 Requires: python-decorator
 
@@ -48,7 +50,8 @@ atabase change sets and database repository versioning.
 
 %prep
 %setup -q -n %{srcname}-%{version}
-%patch0 -p0 -b .rename
+%patch0 -p1 -b .test
+%patch1 -p0 -b .rename
 
 # use real unittest in python 2.7 and up
 sed -i "s/import unittest2/import unittest as unittest2/g" \
@@ -66,9 +69,16 @@ sed -i "s/import unittest2/import unittest as unittest2/g" \
 %{__rm} -rf %{buildroot}
 
 %check
+# Need to set PATH for two reasons:
+# 1) Path isn't being cleared by mock so we have /root/bin/ in the PATH
+# 2) Need to be able to find the newly installed migrate binaries
+PATH=/bin:/usr/bin:%{buildroot}%{_bindir}
+export PATH
+
+PYTHONPATH=`pwd`
+export PYTHONPATH
 echo 'sqlite:///__tmp__' > test_db.cfg
-#%{__python} setup.py test
-#nosetests
+nosetests
 
 %files
 %defattr(-,root,root,-)
@@ -77,6 +87,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %{python_sitelib}/*
 
 %changelog
+* Sun Aug 1 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6-2
+- Update to unittests to work with newer scripttest API
+
 * Sat Jul 31 2010 Thomas Spura <tomspur@fedoraproject.org> - 0.6-1
 - update to new version
 - testsuite doesn't work right now

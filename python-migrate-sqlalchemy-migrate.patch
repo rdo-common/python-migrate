@@ -33,7 +33,7 @@ Index: migrate/tests/versioning/test_shell.py
 ===================================================================
 --- migrate/tests/versioning/test_shell.py.orig
 +++ migrate/tests/versioning/test_shell.py
-@@ -24,15 +24,15 @@ class TestShellCommands(Shell):
+@@ -25,15 +25,15 @@ class TestShellCommands(Shell):
  
      def test_help(self):
          """Displays default help dialog"""
@@ -53,7 +53,7 @@ Index: migrate/tests/versioning/test_shell.py
              self.assertTrue(isinstance(result.stdout, basestring))
              self.assertTrue(result.stdout)
              self.assertFalse(result.stderr)
-@@ -40,10 +40,10 @@ class TestShellCommands(Shell):
+@@ -41,10 +41,10 @@ class TestShellCommands(Shell):
      def test_shutdown_logging(self):
          """Try to shutdown logging output"""
          repos = self.tmp_repos()
@@ -67,7 +67,7 @@ Index: migrate/tests/versioning/test_shell.py
          self.assertEqual(result.stdout, '')
  
          # TODO: assert logging messages to 0
-@@ -88,7 +88,7 @@ class TestShellCommands(Shell):
+@@ -89,7 +89,7 @@ class TestShellCommands(Shell):
          repos = self.tmp_repos()
  
          # Creating a file that doesn't exist should succeed
@@ -76,7 +76,7 @@ Index: migrate/tests/versioning/test_shell.py
  
          # Files should actually be created
          self.assert_(os.path.exists(repos))
-@@ -98,35 +98,35 @@ class TestShellCommands(Shell):
+@@ -99,35 +99,35 @@ class TestShellCommands(Shell):
          self.assertNotEquals(repos_.config.get('db_settings', 'version_table'), 'None')
  
          # Can't create it again: it already exists
@@ -120,7 +120,7 @@ Index: migrate/tests/versioning/test_shell.py
          self.assert_(os.path.exists('%s/versions/002_postgres_upgrade.sql' % repos))
          self.assert_(os.path.exists('%s/versions/002_postgres_downgrade.sql' % repos))
  
-@@ -138,7 +138,7 @@ class TestShellCommands(Shell):
+@@ -139,7 +139,7 @@ class TestShellCommands(Shell):
          self.assert_(not os.path.exists(script))
  
          # No attempt is made to verify correctness of the repository path here
@@ -129,7 +129,7 @@ Index: migrate/tests/versioning/test_shell.py
          self.assert_(os.path.exists(script))
  
  
-@@ -149,41 +149,41 @@ class TestShellRepository(Shell):
+@@ -150,41 +150,41 @@ class TestShellRepository(Shell):
          """Create repository, python change script"""
          super(TestShellRepository, self).setUp()
          self.path_repos = self.tmp_repos()
@@ -180,7 +180,7 @@ Index: migrate/tests/versioning/test_shell.py
              (filename, self.path_repos))
          self.assert_(os.path.exists(filename))
          fd = open(filename)
-@@ -203,17 +203,17 @@ class TestShellDatabase(Shell, DB):
+@@ -204,17 +204,17 @@ class TestShellDatabase(Shell, DB):
          """Ensure we can set version control on a database"""
          path_repos = repos = self.tmp_repos()
          url = self.url
@@ -203,7 +203,7 @@ Index: migrate/tests/versioning/test_shell.py
              % locals(), expect_error=True)
          self.assertEqual(result.returncode, 1)
  
-@@ -222,41 +222,41 @@ class TestShellDatabase(Shell, DB):
+@@ -223,41 +223,41 @@ class TestShellDatabase(Shell, DB):
          """Commands with default arguments set by manage.py"""
          path_repos = repos = self.tmp_repos()
          url = self.url
@@ -256,7 +256,7 @@ Index: migrate/tests/versioning/test_shell.py
  
      @usedb()
      def test_upgrade(self):
-@@ -264,67 +264,67 @@ class TestShellDatabase(Shell, DB):
+@@ -265,67 +265,67 @@ class TestShellDatabase(Shell, DB):
          # Create a repository
          repos_name = 'repos_name'
          repos_path = self.tmp()
@@ -345,7 +345,7 @@ Index: migrate/tests/versioning/test_shell.py
          self.assertEquals(self.run_version(repos_path), 1)
          self.assertEquals(len(os.listdir(os.path.join(repos_path, 'versions'))), beforeCount + 2)
  
-@@ -334,11 +334,11 @@ class TestShellDatabase(Shell, DB):
+@@ -335,11 +335,11 @@ class TestShellDatabase(Shell, DB):
          self.assertEquals(self.run_db_version(self.url, repos_path), 0)
          self.assertRaises(Exception, self.engine.text('select * from t_table').execute)
  
@@ -359,7 +359,7 @@ Index: migrate/tests/versioning/test_shell.py
          self.assertEquals(self.run_db_version(self.url, repos_path), 0)
          self.assertRaises(Exception, self.engine.text('select * from t_table').execute)
  
-@@ -378,15 +378,15 @@ class TestShellDatabase(Shell, DB):
+@@ -379,15 +379,15 @@ class TestShellDatabase(Shell, DB):
          repos_name = 'repos_name'
          repos_path = self.tmp()
  
@@ -380,7 +380,7 @@ Index: migrate/tests/versioning/test_shell.py
          self.assertEquals(self.run_version(repos_path), 1)
          self.assertEquals(self.run_db_version(self.url, repos_path), 0)
  
-@@ -408,7 +408,7 @@ class TestShellDatabase(Shell, DB):
+@@ -409,7 +409,7 @@ class TestShellDatabase(Shell, DB):
          file.write(script_text)
          file.close()
  
@@ -389,7 +389,7 @@ Index: migrate/tests/versioning/test_shell.py
          self.assertEqual(result.returncode, 2)
          self.assertEquals(self.run_version(repos_path), 1)
          self.assertEquals(self.run_db_version(self.url, repos_path), 0)
-@@ -439,7 +439,7 @@ class TestShellDatabase(Shell, DB):
+@@ -440,7 +440,7 @@ class TestShellDatabase(Shell, DB):
          file = open(script_path, 'w')
          file.write(script_text)
          file.close()
@@ -398,7 +398,7 @@ Index: migrate/tests/versioning/test_shell.py
          self.assertEquals(self.run_version(repos_path), 1)
          self.assertEquals(self.run_db_version(self.url, repos_path), 0)
          
-@@ -459,43 +459,43 @@ class TestShellDatabase(Shell, DB):
+@@ -460,19 +460,19 @@ class TestShellDatabase(Shell, DB):
          self.meta.reflect()
          self.meta.drop_all()  # in case junk tables are lying around in the test database
  
@@ -423,12 +423,16 @@ Index: migrate/tests/versioning/test_shell.py
              % (self.url, repos_path, model_module))
          self.assert_("tables missing in database: tmp_account_rundiffs" in result.stdout)
  
-         # Test Deprecation
+@@ -482,7 +482,7 @@ class TestShellDatabase(Shell, DB):
+         else:
+             warnings = None
+         self.env.environ['PYTHONWARNINGS'] = 'default'
 -        result = self.env.run('migrate compare_model_to_db %s %s --model=%s' \
 +        result = self.env.run('sqlalchemy-migrate compare_model_to_db %s %s --model=%s' \
              % (self.url, repos_path, model_module.replace(":", ".")), expect_error=True)
-         self.assertEqual(result.returncode, 0)
-         self.assertTrue("DeprecationWarning" in result.stderr)
+         if warnings == None:
+             del(self.env.environ['PYTHONWARNINGS'])
+@@ -494,19 +494,19 @@ class TestShellDatabase(Shell, DB):
          self.assert_("tables missing in database: tmp_account_rundiffs" in result.stdout)
  
          # Update db to latest model.
@@ -453,7 +457,7 @@ Index: migrate/tests/versioning/test_shell.py
          temp_dict = dict()
          exec result.stdout in temp_dict
  
-@@ -509,10 +509,10 @@ class TestShellDatabase(Shell, DB):
+@@ -520,10 +520,10 @@ class TestShellDatabase(Shell, DB):
    ##Column('passwd', String(length=None, convert_unicode=False, assert_unicode=None))""" in result.stdout)
  
          ## We're happy with db changes, make first db upgrade script to go from version 0 -> 1.
@@ -466,3 +470,17 @@ Index: migrate/tests/versioning/test_shell.py
              #% (self.url, repos_path, old_model_module, model_module))
          #self.assertEqualsIgnoreWhitespace(result_script.stdout,
          #'''from sqlalchemy import *
+@@ -550,11 +550,11 @@ class TestShellDatabase(Shell, DB):
+             #tmp_account_rundiffs.drop()''')
+     
+         ## Save the upgrade script.
+-        #result = self.env.run('migrate script Desc %s' % repos_path)
++        #result = self.env.run('sqlalchemy-migrate script Desc %s' % repos_path)
+         #upgrade_script_path = '%s/versions/001_Desc.py' % repos_path
+         #open(upgrade_script_path, 'w').write(result_script.stdout)
+ 
+-        #result = self.env.run('migrate compare_model_to_db %s %s %s'\
++        #result = self.env.run('sqlalchemy-migrate compare_model_to_db %s %s %s'\
+             #% (self.url, repos_path, model_module))
+         #self.assert_("No schema diffs" in result.stdout)
+ 

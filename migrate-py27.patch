@@ -1,0 +1,31 @@
+Index: sqlalchemy-migrate-0.6/migrate/tests/versioning/test_shell.py
+===================================================================
+--- sqlalchemy-migrate-0.6.orig/migrate/tests/versioning/test_shell.py
++++ sqlalchemy-migrate-0.6/migrate/tests/versioning/test_shell.py
+@@ -4,6 +4,7 @@
+ import os
+ import sys
+ import tempfile
++
+ try:
+     from runpy import run_module
+ except ImportError:
+@@ -476,8 +477,18 @@ class TestShellDatabase(Shell, DB):
+         self.assert_("tables missing in database: tmp_account_rundiffs" in result.stdout)
+ 
+         # Test Deprecation
++        if 'PYTHONWARNINGS' in self.env.environ:
++            warnings = self.env.environ['PYTHONWARNINGS']
++        else:
++            warnings = None
++        self.env.environ['PYTHONWARNINGS'] = 'default'
+         result = self.env.run('migrate compare_model_to_db %s %s --model=%s' \
+             % (self.url, repos_path, model_module.replace(":", ".")), expect_error=True)
++        if warnings == None:
++            del(self.env.environ['PYTHONWARNINGS'])
++        else:
++            self.env.environ['PYTHONWARNINGS'] = warnings
++
+         self.assertEqual(result.returncode, 0)
+         self.assertTrue("DeprecationWarning" in result.stderr)
+         self.assert_("tables missing in database: tmp_account_rundiffs" in result.stdout)

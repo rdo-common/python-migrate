@@ -15,8 +15,10 @@ URL: http://code.google.com/p/%{srcname}/
 Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
 # Patch to update to new scripttest API submitted upstream
 Patch0: migrate-scripttest-update.patch
+# Patch to fix a unittest on python-2.7
+Patch1: migrate-py27.patch
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
-Patch1: python-migrate-sqlalchemy-migrate.patch
+Patch100: python-migrate-sqlalchemy-migrate.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -51,7 +53,8 @@ atabase change sets and database repository versioning.
 %prep
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .test
-%patch1 -p0 -b .rename
+%patch1 -p1 -b .py27
+%patch100 -p0 -b .rename
 
 # use real unittest in python 2.7 and up
 sed -i "s/import unittest2/import unittest as unittest2/g" \
@@ -82,7 +85,7 @@ nosetests
 
 %files
 %defattr(-,root,root,-)
-%doc README CHANGELOG docs/
+%doc README TODO docs/
 %{_bindir}/*
 %{python_sitelib}/*
 

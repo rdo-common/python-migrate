@@ -6,7 +6,7 @@
 
 Name: python-migrate
 Version: 0.6
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -34,7 +34,7 @@ BuildRequires: python-decorator
 BuildRequires: python-scripttest
 BuildRequires: python-tempita
 
-Requires: python-sqlalchemy >= 0.6
+Requires: python-sqlalchemy
 Requires: python-setuptools
 Requires: python-decorator
 
@@ -90,6 +90,8 @@ nosetests
 %{python_sitelib}/*
 
 %changelog
+* Thu Jan 13 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6-3
+- Fix SQLAlchemy Requires -- need >= 0.5, not 0.6
 * Sun Aug 1 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6-2
 - Update to unittests to work with newer scripttest API
 

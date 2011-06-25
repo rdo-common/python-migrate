@@ -5,8 +5,8 @@
 %global srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.6
-Release: 4%{?dist}
+Version: 0.7.1
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -85,16 +85,20 @@ nosetests
 
 %files
 %defattr(-,root,root,-)
-%doc README TODO docs/
+%doc README docs/
 %{_bindir}/*
 %{python_sitelib}/*
 
 %changelog
+* Sat Jun 25 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.7-1
+- Update to new version compatible with SQLAlchemy 0.7.x.
+
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
 * Thu Jan 13 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6-3
 - Fix SQLAlchemy Requires -- need >= 0.5, not 0.6
+
 * Sun Aug 1 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6-2
 - Update to unittests to work with newer scripttest API
 

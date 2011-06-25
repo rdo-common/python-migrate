@@ -1,7 +1,7 @@
-Index: sqlalchemy-migrate-0.6/migrate/tests/fixture/shell.py
+Index: sqlalchemy-migrate-0.7.1/migrate/tests/fixture/shell.py
 ===================================================================
---- sqlalchemy-migrate-0.6.orig/migrate/tests/fixture/shell.py
-+++ sqlalchemy-migrate-0.6/migrate/tests/fixture/shell.py
+--- sqlalchemy-migrate-0.7.1.orig/migrate/tests/fixture/shell.py
++++ sqlalchemy-migrate-0.7.1/migrate/tests/fixture/shell.py
 @@ -22,7 +22,6 @@ class Shell(Pathed):
          log.debug('PATH for ScriptTest: %s', migrate_path)
          self.env = TestFileEnvironment(

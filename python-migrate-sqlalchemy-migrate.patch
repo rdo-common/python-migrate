@@ -1,22 +1,6 @@
-Index: setup.py
-===================================================================
---- setup.py.orig
-+++ setup.py
-@@ -32,8 +32,8 @@ setup(
-     license = "MIT",
-     entry_points = """
-     [console_scripts]
--    migrate = migrate.versioning.shell:main
--    migrate-repository = migrate.versioning.migrate_repository:main
-+    sqlalchemy-migrate = migrate.versioning.shell:main
-+    sqlalchemy-migrate-repository = migrate.versioning.migrate_repository:main
-     """,
-     test_suite = "nose.collector",
- )
-Index: migrate/tests/fixture/shell.py
-===================================================================
---- migrate/tests/fixture/shell.py.orig
-+++ migrate/tests/fixture/shell.py
+diff -up sqlalchemy-migrate-0.7.2/migrate/tests/fixture/shell.py.rename sqlalchemy-migrate-0.7.2/migrate/tests/fixture/shell.py
+--- sqlalchemy-migrate-0.7.2/migrate/tests/fixture/shell.py.rename	2011-11-08 15:53:44.296081010 +0100
++++ sqlalchemy-migrate-0.7.2/migrate/tests/fixture/shell.py	2011-11-08 15:53:44.301081040 +0100
 @@ -25,9 +25,9 @@ class Shell(Pathed):
          )
  
@@ -29,10 +13,9 @@ Index: migrate/tests/fixture/shell.py
 -        result = self.env.run('migrate db_version %s %s' % (url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate db_version %s %s' % (url, repos_path))
          return int(result.stdout.strip())
-Index: migrate/tests/versioning/test_shell.py
-===================================================================
---- migrate/tests/versioning/test_shell.py.orig
-+++ migrate/tests/versioning/test_shell.py
+diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py
+--- sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename	2011-11-08 15:53:44.298081022 +0100
++++ sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py	2011-11-08 16:01:22.408916690 +0100
 @@ -21,15 +21,15 @@ class TestShellCommands(Shell):
  
      def test_help(self):
@@ -109,16 +92,16 @@ Index: migrate/tests/versioning/test_shell.py
 -        result = self.env.run('migrate create %s repository_name' % repos)
 +        result = self.env.run('sqlalchemy-migrate create %s repository_name' % repos)
  
--        result = self.env.run('migrate script_sql mydb %s' % repos)
-+        result = self.env.run('sqlalchemy-migrate script_sql mydb %s' % repos)
-         self.assert_(os.path.exists('%s/versions/001_mydb_upgrade.sql' % repos))
-         self.assert_(os.path.exists('%s/versions/001_mydb_downgrade.sql' % repos))
+-        result = self.env.run('migrate script_sql mydb foo %s' % repos)
++        result = self.env.run('sqlalchemy-migrate script_sql mydb foo %s' % repos)
+         self.assert_(os.path.exists('%s/versions/001_foo_mydb_upgrade.sql' % repos))
+         self.assert_(os.path.exists('%s/versions/001_foo_mydb_downgrade.sql' % repos))
  
          # Test creating a second
--        result = self.env.run('migrate script_sql postgres --repository=%s' % repos)
-+        result = self.env.run('sqlalchemy-migrate script_sql postgres --repository=%s' % repos)
-         self.assert_(os.path.exists('%s/versions/002_postgres_upgrade.sql' % repos))
-         self.assert_(os.path.exists('%s/versions/002_postgres_downgrade.sql' % repos))
+-        result = self.env.run('migrate script_sql postgres foo --repository=%s' % repos)
++        result = self.env.run('sqlalchemy-migrate script_sql postgres foo --repository=%s' % repos)
+         self.assert_(os.path.exists('%s/versions/002_foo_postgres_upgrade.sql' % repos))
+         self.assert_(os.path.exists('%s/versions/002_foo_postgres_downgrade.sql' % repos))
  
 @@ -144,7 +144,7 @@ class TestShellCommands(Shell):
          self.assert_(not os.path.exists(script))
@@ -484,3 +467,17 @@ Index: migrate/tests/versioning/test_shell.py
              #% (self.url, repos_path, model_module))
          #self.assert_("No schema diffs" in result.stdout)
  
+diff -up sqlalchemy-migrate-0.7.2/setup.py.rename sqlalchemy-migrate-0.7.2/setup.py
+--- sqlalchemy-migrate-0.7.2/setup.py.rename	2011-11-01 21:22:44.000000000 +0100
++++ sqlalchemy-migrate-0.7.2/setup.py	2011-11-08 15:53:44.300081034 +0100
+@@ -32,8 +32,8 @@ setup(
+     license = "MIT",
+     entry_points = """
+     [console_scripts]
+-    migrate = migrate.versioning.shell:main
+-    migrate-repository = migrate.versioning.migrate_repository:main
++    sqlalchemy-migrate = migrate.versioning.shell:main
++    sqlalchemy-migrate-repository = migrate.versioning.migrate_repository:main
+     """,
+     test_suite = "nose.collector",
+ )

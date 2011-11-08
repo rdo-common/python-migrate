@@ -5,7 +5,7 @@
 %global srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.7.1
+Version: 0.7.2
 Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
@@ -54,7 +54,7 @@ atabase change sets and database repository versioning.
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .test
 %patch1 -p1 -b .py27
-%patch100 -p0 -b .rename
+%patch100 -p1 -b .rename
 
 # use real unittest in python 2.7 and up
 sed -i "s/import unittest2/import unittest as unittest2/g" \
@@ -90,6 +90,9 @@ nosetests
 %{python_sitelib}/*
 
 %changelog
+* Tue Nov 08 2011 Martin Bacovsky <mbacovsk@redhat.com> - 0.7.2-1
+- Updated to new version
+
 * Sat Jun 25 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.7-1
 - Update to new version compatible with SQLAlchemy 0.7.x.
 

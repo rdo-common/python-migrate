@@ -6,7 +6,7 @@
 
 Name: python-migrate
 Version: 0.7.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -23,26 +23,30 @@ Patch100: python-migrate-sqlalchemy-migrate.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch: noarch
-BuildRequires: python-devel
+BuildRequires: python2-devel
 BuildRequires: python-sqlalchemy
-BuildRequires: python-setuptools-devel
+BuildRequires: python-setuptools
 BuildRequires: python-nose
 BuildRequires: python-sphinx
 BuildRequires: python-decorator
+BuildRequires: python-tempita
 
 # for testsuite
 BuildRequires: python-scripttest
-BuildRequires: python-tempita
 
 Requires: python-sqlalchemy
 Requires: python-setuptools
 Requires: python-decorator
+Requires: python-tempita
 
 %if 0%{?rhel} && 0%{?rhel} < 6
 BuildRequires: python-sqlite2
 Requires:      python-sqlite2
 %endif
 
+%if 0%{?rhel}
+BuildRequires: python-unittest2
+%endif
 
 %description
 Schema migration tools for SQLAlchemy designed to support an agile approach
@@ -57,9 +61,11 @@ atabase change sets and database repository versioning.
 %patch100 -p1 -b .rename
 
 # use real unittest in python 2.7 and up
+%if 0%{?fedora} || 0%{?rhel} > 6
 sed -i "s/import unittest2/import unittest as unittest2/g" \
     migrate/tests/fixture/__init__.py \
     migrate/tests/fixture/base.py
+%endif
 
 %build
 %{__python} setup.py build
@@ -90,6 +96,9 @@ nosetests
 %{python_sitelib}/*
 
 %changelog
+* Wed Nov 16 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.7.2-2
+- Require python-tempita
+
 * Tue Nov 08 2011 Martin Bacovsky <mbacovsk@redhat.com> - 0.7.2-1
 - Updated to new version
 

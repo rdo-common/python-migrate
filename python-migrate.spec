@@ -6,7 +6,7 @@
 
 Name: python-migrate
 Version: 0.7.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -96,6 +96,9 @@ nosetests
 %{python_sitelib}/*
 
 %changelog
+* Thu Dec 20 2012 Pádraig Brady <P@draigBrady.com> - 0.7.2-5
+- Fix build on RHEL 7
+
 * Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 

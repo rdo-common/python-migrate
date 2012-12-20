@@ -17,6 +17,8 @@ Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
 Patch0: migrate-scripttest-update.patch
 # Patch to fix a unittest on python-2.7
 Patch1: migrate-py27.patch
+# Patch to fix a unittest failure on newer python
+Patch2: migrate-test-int-overflow.patch
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
 Patch100: python-migrate-sqlalchemy-migrate.patch
 
@@ -58,6 +60,7 @@ atabase change sets and database repository versioning.
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .test
 %patch1 -p1 -b .py27
+%patch2 -p1 -b .pynew
 %patch100 -p1 -b .rename
 
 # use real unittest in python 2.7 and up

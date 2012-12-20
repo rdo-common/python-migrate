@@ -44,7 +44,7 @@ BuildRequires: python-sqlite2
 Requires:      python-sqlite2
 %endif
 
-%if 0%{?rhel}
+%if 0%{?rhel} && 0%{?rhel} < 7
 BuildRequires: python-unittest2
 %endif
 

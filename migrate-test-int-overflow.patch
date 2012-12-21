@@ -1,12 +1,31 @@
+Don't use __cmp__ which is deprecated and retricted to C long integers,
+rather than python's arbitrary precision ints
 diff -Naur sqlalchemy-migrate-0.7.2.orig/migrate/versioning/version.py sqlalchemy-migrate-0.7.2/migrate/versioning/version.py
 --- sqlalchemy-migrate-0.7.2.orig/migrate/versioning/version.py	2011-10-28 15:11:43.000000000 +0000
-+++ sqlalchemy-migrate-0.7.2/migrate/versioning/version.py	2012-12-20 14:33:28.035597164 +0000
-@@ -27,7 +27,7 @@
++++ sqlalchemy-migrate-0.7.2/migrate/versioning/version.py	2012-12-21 10:52:09.864223682 +0000
+@@ -37,8 +37,23 @@
+     def __sub__(self, value):
+         return self + (int(value) * -1)
  
-     def __init__(self,value):
-         self.value = str(int(value))
--        if self < 0:
-+        if int(value) < 0:
-             raise ValueError("Version number cannot be negative")
+-    def __cmp__(self, value):
+-        return int(self) - int(value)
++    def __eq__(self, value):
++        return int(self) == int(value)
++
++    def __ne__(self, value):
++        return int(self) != int(value)
++
++    def __lt__(self, value):
++        return int(self) < int(value)
++
++    def __gt__(self, value):
++        return int(self) > int(value)
++
++    def __ge__(self, value):
++        return int(self) >= int(value)
++
++    def __le__(self, value):
++        return int(self) <= int(value)
  
-     def __add__(self, value):
+     def __repr__(self):
+         return "<VerNum(%s)>" % self.value

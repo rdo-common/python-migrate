@@ -53,8 +53,8 @@ BuildRequires: python-unittest2
 %description
 Schema migration tools for SQLAlchemy designed to support an agile approach
 to database design and make it easier to keep development and production
-databases in sync as schema changes are required.  It allows you to manage 
-atabase change sets and database repository versioning.
+databases in sync as schema changes are required.  It allows you to manage
+database change sets and database repository versioning.
 
 %prep
 %setup -q -n %{srcname}-%{version}

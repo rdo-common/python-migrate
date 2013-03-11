@@ -6,7 +6,7 @@
 
 Name: python-migrate
 Version: 0.7.2
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -19,6 +19,8 @@ Patch0: migrate-scripttest-update.patch
 Patch1: migrate-py27.patch
 # Patch to fix a unittest failure on newer python
 Patch2: migrate-test-int-overflow.patch
+# Patch to make compat with sqlalchemy >= 0.8
+Patch3: python-migrate-sqlalchemy-0.8.patch
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
 Patch100: python-migrate-sqlalchemy-migrate.patch
 
@@ -61,6 +63,7 @@ database change sets and database repository versioning.
 %patch0 -p1 -b .test
 %patch1 -p1 -b .py27
 %patch2 -p1 -b .pynew
+%patch3 -p1 -b .sql0.8
 %patch100 -p1 -b .rename
 
 # use real unittest in python 2.7 and up
@@ -99,6 +102,9 @@ nosetests
 %{python_sitelib}/*
 
 %changelog
+* Mon Mar 11 2013 Pádraig Brady <P@draigBrady.com> - 0.7.2-7
+- Add compatability for sqlalchemy >= 0.8
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 

@@ -1,0 +1,33 @@
+diff -Naur sqlalchemy-migrate-0.7.2.orig/migrate/tests/changeset/test_changeset.py sqlalchemy-migrate-0.7.2/migrate/tests/changeset/test_changeset.py
+--- sqlalchemy-migrate-0.7.2.orig/migrate/tests/changeset/test_changeset.py	2011-10-28 15:11:43.000000000 +0000
++++ sqlalchemy-migrate-0.7.2/migrate/tests/changeset/test_changeset.py	2013-03-11 11:45:29.066638792 +0000
+@@ -560,7 +560,7 @@
+             self.table.drop()
+         try:
+             self.table.create()
+-        except sqlalchemy.exceptions.SQLError, e:
++        except sqlalchemy.exc.SQLError, e:
+             # SQLite: database schema has changed
+             if not self.url.startswith('sqlite://'):
+                 raise
+@@ -569,7 +569,7 @@
+         if self.table.exists():
+             try:
+                 self.table.drop(self.engine)
+-            except sqlalchemy.exceptions.SQLError,e:
++            except sqlalchemy.exc.SQLError,e:
+                 # SQLite: database schema has changed
+                 if not self.url.startswith('sqlite://'):
+                     raise
+diff -Naur sqlalchemy-migrate-0.7.2.orig/migrate/versioning/schema.py sqlalchemy-migrate-0.7.2/migrate/versioning/schema.py
+--- sqlalchemy-migrate-0.7.2.orig/migrate/versioning/schema.py	2011-10-28 15:11:43.000000000 +0000
++++ sqlalchemy-migrate-0.7.2/migrate/versioning/schema.py	2013-03-11 11:44:45.769557705 +0000
+@@ -7,7 +7,7 @@
+ from sqlalchemy import (Table, Column, MetaData, String, Text, Integer,
+     create_engine)
+ from sqlalchemy.sql import and_
+-from sqlalchemy import exceptions as sa_exceptions
++from sqlalchemy import exc as sa_exceptions
+ from sqlalchemy.sql import bindparam
+ 
+ from migrate import exceptions

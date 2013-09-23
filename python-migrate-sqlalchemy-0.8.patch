@@ -1,3 +1,11 @@
+Combination of 0.8 compat patches.
+
+All are currently after 0.7.2 tag at:
+https://github.com/stackforge/sqlalchemy-migrate
+
+Also included is this adjustment:
+https://review.openstack.org/#/c/47847/
+
 diff -Naur sqlalchemy-migrate-0.7.2.orig/migrate/tests/changeset/test_changeset.py sqlalchemy-migrate-0.7.2/migrate/tests/changeset/test_changeset.py
 --- sqlalchemy-migrate-0.7.2.orig/migrate/tests/changeset/test_changeset.py	2011-10-28 15:11:43.000000000 +0000
 +++ sqlalchemy-migrate-0.7.2/migrate/tests/changeset/test_changeset.py	2013-03-11 11:45:29.066638792 +0000
@@ -31,3 +39,105 @@ diff -Naur sqlalchemy-migrate-0.7.2.orig/migrate/versioning/schema.py sqlalchemy
  from sqlalchemy.sql import bindparam
  
  from migrate import exceptions
+diff -Naur sqlalchemy-migrate-0.7.2.orig/migrate/changeset/ansisql.py sqlalchemy-migrate-0.7.2/migrate/changeset/ansisql.py
+--- sqlalchemy-migrate-0.7.2.orig/migrate/changeset/ansisql.py	2011-10-28 15:11:43.000000000 +0000
++++ sqlalchemy-migrate-0.7.2/migrate/changeset/ansisql.py	2013-09-23 11:34:18.656844658 +0000
+@@ -171,8 +171,8 @@
+                     self.preparer.quote(
+                         self._validate_identifier(
+                             index.new_name, True), index.quote)))
+-        else:
+-            # SA >= 0.6.5
++        elif hasattr(self, '_index_identifier'):
++            # SA >= 0.6.5, < 0.8
+             self.append("ALTER INDEX %s RENAME TO %s" % (
+                     self.preparer.quote(
+                         self._index_identifier(
+@@ -180,6 +180,22 @@
+                     self.preparer.quote(
+                         self._index_identifier(
+                             index.new_name), index.quote)))
++        else:
++            # SA >= 0.8
++            class NewName(object):
++                """Map obj.name -> obj.new_name"""
++                def __init__(self, index):
++                    self.name = index.new_name
++                    self._obj = index
++
++                def __getattr__(self, attr):
++                    if attr == 'name':
++                        return getattr(self, attr)
++                    return getattr(self._obj, attr)
++
++            self.append("ALTER INDEX %s RENAME TO %s" % (
++                    self._prepared_index_name(index),
++                    self._prepared_index_name(NewName(index))))
+         self.execute()
+ 
+     def visit_column(self, delta):
+diff -Naur sqlalchemy-migrate-0.7.2.orig_reflect/migrate/tests/fixture/database.py sqlalchemy-migrate-0.7.2.reflect/migrate/tests/fixture/database.py
+--- sqlalchemy-migrate-0.7.2.orig_reflect/migrate/tests/fixture/database.py	2011-10-28 15:11:43.000000000 +0000
++++ sqlalchemy-migrate-0.7.2.reflect/migrate/tests/fixture/database.py	2013-09-23 12:20:26.022608233 +0000
+@@ -128,7 +128,8 @@
+     def _setup(self, url):
+         self._connect(url)
+         # make sure there are no tables lying around
+-        meta = MetaData(self.engine, reflect=True)
++        meta = MetaData(self.engine)
++        meta.reflect()
+         meta.drop_all()
+ 
+     def _teardown(self):
+diff -Naur sqlalchemy-migrate-0.7.2.orig_reflect/migrate/tests/versioning/test_genmodel.py sqlalchemy-migrate-0.7.2.reflect/migrate/tests/versioning/test_genmodel.py
+--- sqlalchemy-migrate-0.7.2.orig_reflect/migrate/tests/versioning/test_genmodel.py	2011-10-28 15:11:43.000000000 +0000
++++ sqlalchemy-migrate-0.7.2.reflect/migrate/tests/versioning/test_genmodel.py	2013-09-23 12:21:42.254900961 +0000
+@@ -18,9 +18,11 @@
+ 
+     def _setup(self, url):
+         super(TestSchemaDiff, self)._setup(url)
+-        self.meta = MetaData(self.engine, reflect=True)
++        self.meta = MetaData(self.engine)
++        self.meta.reflect()
+         self.meta.drop_all()  # in case junk tables are lying around in the test database
+-        self.meta = MetaData(self.engine, reflect=True)  # needed if we just deleted some tables
++        self.meta = MetaData(self.engine)  # needed if we just deleted some tables
++        self.meta.reflect()
+         self.table = Table(self.table_name, self.meta,
+             Column('id',Integer(), primary_key=True),
+             Column('name', UnicodeText()),
+@@ -29,7 +31,8 @@
+ 
+     def _teardown(self):
+         if self.table.exists():
+-            self.meta = MetaData(self.engine, reflect=True)
++            self.meta = MetaData(self.engine)
++            self.meta.reflect()
+             self.meta.drop_all()
+         super(TestSchemaDiff, self)._teardown()
+ 
+diff -Naur sqlalchemy-migrate-0.7.2.orig_reflect/migrate/tests/versioning/test_shell.py sqlalchemy-migrate-0.7.2.reflect/migrate/tests/versioning/test_shell.py
+--- sqlalchemy-migrate-0.7.2.orig_reflect/migrate/tests/versioning/test_shell.py	2013-09-11 23:46:46.288846726 +0000
++++ sqlalchemy-migrate-0.7.2.reflect/migrate/tests/versioning/test_shell.py	2013-09-23 12:20:41.229666598 +0000
+@@ -461,7 +461,7 @@
+         old_model_module = 'migrate.tests.fixture.models:meta_old_rundiffs'
+ 
+         # Create empty repository.
+-        self.meta = MetaData(self.engine, reflect=True)
++        self.meta = MetaData(self.engine)
+         self.meta.reflect()
+         self.meta.drop_all()  # in case junk tables are lying around in the test database
+ 
+diff -Naur sqlalchemy-migrate-0.7.2.orig_reflect/migrate/versioning/schemadiff.py sqlalchemy-migrate-0.7.2.reflect/migrate/versioning/schemadiff.py
+--- sqlalchemy-migrate-0.7.2.orig_reflect/migrate/versioning/schemadiff.py	2011-10-28 15:11:43.000000000 +0000
++++ sqlalchemy-migrate-0.7.2.reflect/migrate/versioning/schemadiff.py	2013-09-23 12:20:06.302532576 +0000
+@@ -16,7 +16,8 @@
+     :return: object which will evaluate to :keyword:`True` if there \
+       are differences else :keyword:`False`.
+     """
+-    db_metadata = sqlalchemy.MetaData(engine, reflect=True)
++    db_metadata = sqlalchemy.MetaData(engine)
++    db_metadata.reflect()
+ 
+     # sqlite will include a dynamically generated 'sqlite_sequence' table if
+     # there are autoincrement sequences in the database; this should not be

@@ -13,6 +13,7 @@ Group: Development/Languages
 License: MIT
 URL: http://code.google.com/p/%{srcname}/
 Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
+# TODO: Update source from https://github.com/stackforge/sqlalchemy-migrate when tagged
 # Patch to update to new scripttest API submitted upstream
 Patch0: migrate-scripttest-update.patch
 # Patch to fix a unittest on python-2.7

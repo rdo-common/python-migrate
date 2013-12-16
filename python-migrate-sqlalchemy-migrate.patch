@@ -1,7 +1,7 @@
-diff -up sqlalchemy-migrate-0.7.2/migrate/tests/fixture/shell.py.rename sqlalchemy-migrate-0.7.2/migrate/tests/fixture/shell.py
---- sqlalchemy-migrate-0.7.2/migrate/tests/fixture/shell.py.rename	2011-11-08 15:53:44.296081010 +0100
-+++ sqlalchemy-migrate-0.7.2/migrate/tests/fixture/shell.py	2011-11-08 15:53:44.301081040 +0100
-@@ -25,9 +25,9 @@ class Shell(Pathed):
+diff -Naur sqlalchemy-migrate-0.8.2.orig/migrate/tests/fixture/shell.py sqlalchemy-migrate-0.8.2/migrate/tests/fixture/shell.py
+--- sqlalchemy-migrate-0.8.2.orig/migrate/tests/fixture/shell.py	2013-12-19 12:43:28.862668311 +0000
++++ sqlalchemy-migrate-0.8.2/migrate/tests/fixture/shell.py	2013-12-19 13:08:10.487109108 +0000
+@@ -25,9 +25,9 @@
          )
  
      def run_version(self, repos_path):
@@ -13,10 +13,10 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/fixture/shell.py.rename sqlalche
 -        result = self.env.run('migrate db_version %s %s' % (url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate db_version %s %s' % (url, repos_path))
          return int(result.stdout.strip())
-diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py
---- sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename	2011-11-08 15:53:44.298081022 +0100
-+++ sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py	2011-11-08 16:01:22.408916690 +0100
-@@ -21,15 +21,15 @@ class TestShellCommands(Shell):
+diff -Naur sqlalchemy-migrate-0.8.2.orig/migrate/tests/versioning/test_shell.py sqlalchemy-migrate-0.8.2/migrate/tests/versioning/test_shell.py
+--- sqlalchemy-migrate-0.8.2.orig/migrate/tests/versioning/test_shell.py	2013-12-19 12:43:28.865668350 +0000
++++ sqlalchemy-migrate-0.8.2/migrate/tests/versioning/test_shell.py	2013-12-19 13:08:10.488109123 +0000
+@@ -20,15 +20,15 @@
  
      def test_help(self):
          """Displays default help dialog"""
@@ -36,7 +36,7 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
              self.assertTrue(isinstance(result.stdout, basestring))
              self.assertTrue(result.stdout)
              self.assertFalse(result.stderr)
-@@ -37,10 +37,10 @@ class TestShellCommands(Shell):
+@@ -36,10 +36,10 @@
      def test_shutdown_logging(self):
          """Try to shutdown logging output"""
          repos = self.tmp_repos()
@@ -50,7 +50,7 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
          self.assertEqual(result.stdout, '')
  
          # TODO: assert logging messages to 0
-@@ -94,7 +94,7 @@ class TestShellCommands(Shell):
+@@ -93,7 +93,7 @@
          repos = self.tmp_repos()
  
          # Creating a file that doesn't exist should succeed
@@ -59,7 +59,7 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
  
          # Files should actually be created
          self.assert_(os.path.exists(repos))
-@@ -104,35 +104,35 @@ class TestShellCommands(Shell):
+@@ -103,35 +103,35 @@
          self.assertNotEquals(repos_.config.get('db_settings', 'version_table'), 'None')
  
          # Can't create it again: it already exists
@@ -103,7 +103,7 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
          self.assert_(os.path.exists('%s/versions/002_foo_postgres_upgrade.sql' % repos))
          self.assert_(os.path.exists('%s/versions/002_foo_postgres_downgrade.sql' % repos))
  
-@@ -144,7 +144,7 @@ class TestShellCommands(Shell):
+@@ -143,7 +143,7 @@
          self.assert_(not os.path.exists(script))
  
          # No attempt is made to verify correctness of the repository path here
@@ -112,7 +112,7 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
          self.assert_(os.path.exists(script))
  
  
-@@ -155,41 +155,41 @@ class TestShellRepository(Shell):
+@@ -154,41 +154,41 @@
          """Create repository, python change script"""
          super(TestShellRepository, self).setUp()
          self.path_repos = self.tmp_repos()
@@ -163,7 +163,7 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
              (filename, self.path_repos))
          self.assert_(os.path.exists(filename))
          fd = open(filename)
-@@ -209,17 +209,17 @@ class TestShellDatabase(Shell, DB):
+@@ -208,17 +208,17 @@
          """Ensure we can set version control on a database"""
          path_repos = repos = self.tmp_repos()
          url = self.url
@@ -186,7 +186,7 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
              % locals(), expect_error=True)
          self.assertEqual(result.returncode, 1)
  
-@@ -228,41 +228,41 @@ class TestShellDatabase(Shell, DB):
+@@ -227,41 +227,41 @@
          """Commands with default arguments set by manage.py"""
          path_repos = repos = self.tmp_repos()
          url = self.url
@@ -239,13 +239,13 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
  
      @usedb()
      def test_upgrade(self):
-@@ -270,67 +270,67 @@ class TestShellDatabase(Shell, DB):
+@@ -269,67 +269,67 @@
          # Create a repository
          repos_name = 'repos_name'
          repos_path = self.tmp()
 -        result = self.env.run('migrate create %(repos_path)s %(repos_name)s' % locals())
 +        result = self.env.run('sqlalchemy-migrate create %(repos_path)s %(repos_name)s' % locals())
-         self.assertEquals(self.run_version(repos_path), 0)
+         self.assertEqual(self.run_version(repos_path), 0)
  
          # Version the DB
 -        result = self.env.run('migrate drop_version_control %s %s' % (self.url, repos_path), expect_error=True)
@@ -254,25 +254,25 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
 +        result = self.env.run('sqlalchemy-migrate version_control %s %s' % (self.url, repos_path))
  
          # Upgrades with latest version == 0
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
 -        result = self.env.run('migrate upgrade %s %s' % (self.url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate upgrade %s %s' % (self.url, repos_path))
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
 -        result = self.env.run('migrate upgrade %s %s' % (self.url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate upgrade %s %s' % (self.url, repos_path))
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
 -        result = self.env.run('migrate upgrade %s %s 1' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate upgrade %s %s 1' % (self.url, repos_path), expect_error=True)
-         self.assertEquals(result.returncode, 1)
+         self.assertEqual(result.returncode, 1)
 -        result = self.env.run('migrate upgrade %s %s -1' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate upgrade %s %s -1' % (self.url, repos_path), expect_error=True)
-         self.assertEquals(result.returncode, 2)
+         self.assertEqual(result.returncode, 2)
  
          # Add a script to the repository; upgrade the db
 -        result = self.env.run('migrate script Desc --repository=%s' % (repos_path))
 +        result = self.env.run('sqlalchemy-migrate script Desc --repository=%s' % (repos_path))
-         self.assertEquals(self.run_version(repos_path), 1)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_version(repos_path), 1)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
  
          # Test preview
 -        result = self.env.run('migrate upgrade %s %s 0 --preview_sql' % (self.url, repos_path))
@@ -282,28 +282,28 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
  
 -        result = self.env.run('migrate upgrade %s %s' % (self.url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate upgrade %s %s' % (self.url, repos_path))
-         self.assertEquals(self.run_db_version(self.url, repos_path), 1)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 1)
          
          # Downgrade must have a valid version specified
 -        result = self.env.run('migrate downgrade %s %s' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate downgrade %s %s' % (self.url, repos_path), expect_error=True)
-         self.assertEquals(result.returncode, 2)
+         self.assertEqual(result.returncode, 2)
 -        result = self.env.run('migrate downgrade %s %s -1' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate downgrade %s %s -1' % (self.url, repos_path), expect_error=True)
-         self.assertEquals(result.returncode, 2)
+         self.assertEqual(result.returncode, 2)
 -        result = self.env.run('migrate downgrade %s %s 2' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate downgrade %s %s 2' % (self.url, repos_path), expect_error=True)
-         self.assertEquals(result.returncode, 2)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 1)
+         self.assertEqual(result.returncode, 2)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 1)
          
 -        result = self.env.run('migrate downgrade %s %s 0' % (self.url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate downgrade %s %s 0' % (self.url, repos_path))
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
          
 -        result = self.env.run('migrate downgrade %s %s 1' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate downgrade %s %s 1' % (self.url, repos_path), expect_error=True)
-         self.assertEquals(result.returncode, 2)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(result.returncode, 2)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
  
 -        result = self.env.run('migrate drop_version_control %s %s' % (self.url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate drop_version_control %s %s' % (self.url, repos_path))
@@ -319,30 +319,30 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
 +        result = self.env.run('sqlalchemy-migrate create %s %s' % (repos_path, repos_name))
 +        result = self.env.run('sqlalchemy-migrate drop_version_control %s %s' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate version_control %s %s' % (self.url, repos_path))
-         self.assertEquals(self.run_version(repos_path), 0)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_version(repos_path), 0)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
  
          beforeCount = len(os.listdir(os.path.join(repos_path, 'versions')))  # hmm, this number changes sometimes based on running from svn
 -        result = self.env.run('migrate script_sql %s --repository=%s' % ('postgres', repos_path))
 +        result = self.env.run('sqlalchemy-migrate script_sql %s --repository=%s' % ('postgres', repos_path))
-         self.assertEquals(self.run_version(repos_path), 1)
-         self.assertEquals(len(os.listdir(os.path.join(repos_path, 'versions'))), beforeCount + 2)
+         self.assertEqual(self.run_version(repos_path), 1)
+         self.assertEqual(len(os.listdir(os.path.join(repos_path, 'versions'))), beforeCount + 2)
  
-@@ -340,11 +340,11 @@ class TestShellDatabase(Shell, DB):
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+@@ -339,11 +339,11 @@
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
          self.assertRaises(Exception, self.engine.text('select * from t_table').execute)
  
 -        result = self.env.run('migrate upgrade %s %s' % (self.url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate upgrade %s %s' % (self.url, repos_path))
-         self.assertEquals(self.run_db_version(self.url, repos_path), 1)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 1)
          self.engine.text('select * from t_table').execute()
  
 -        result = self.env.run('migrate downgrade %s %s 0' % (self.url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate downgrade %s %s 0' % (self.url, repos_path))
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
          self.assertRaises(Exception, self.engine.text('select * from t_table').execute)
  
-@@ -384,15 +384,15 @@ class TestShellDatabase(Shell, DB):
+@@ -383,15 +383,15 @@
          repos_name = 'repos_name'
          repos_path = self.tmp()
  
@@ -352,36 +352,36 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
 +        result = self.env.run('sqlalchemy-migrate create repository_name --repository=%s' % repos_path)
 +        result = self.env.run('sqlalchemy-migrate drop_version_control %s %s' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate version_control %s %s' % (self.url, repos_path))
-         self.assertEquals(self.run_version(repos_path), 0)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_version(repos_path), 0)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
  
          # Empty script should succeed
 -        result = self.env.run('migrate script Desc %s' % repos_path)
 -        result = self.env.run('migrate test %s %s' % (self.url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate script Desc %s' % repos_path)
 +        result = self.env.run('sqlalchemy-migrate test %s %s' % (self.url, repos_path))
-         self.assertEquals(self.run_version(repos_path), 1)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_version(repos_path), 1)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
  
-@@ -414,7 +414,7 @@ class TestShellDatabase(Shell, DB):
+@@ -413,7 +413,7 @@
          file.write(script_text)
          file.close()
  
 -        result = self.env.run('migrate test %s %s bla' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate test %s %s bla' % (self.url, repos_path), expect_error=True)
          self.assertEqual(result.returncode, 2)
-         self.assertEquals(self.run_version(repos_path), 1)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
-@@ -445,7 +445,7 @@ class TestShellDatabase(Shell, DB):
+         self.assertEqual(self.run_version(repos_path), 1)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
+@@ -444,7 +444,7 @@
          file = open(script_path, 'w')
          file.write(script_text)
          file.close()
 -        result = self.env.run('migrate test %s %s' % (self.url, repos_path))
 +        result = self.env.run('sqlalchemy-migrate test %s %s' % (self.url, repos_path))
-         self.assertEquals(self.run_version(repos_path), 1)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_version(repos_path), 1)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
          
-@@ -465,19 +465,19 @@ class TestShellDatabase(Shell, DB):
+@@ -464,19 +464,19 @@
          self.meta.reflect()
          self.meta.drop_all()  # in case junk tables are lying around in the test database
  
@@ -391,8 +391,8 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
 +        result = self.env.run('sqlalchemy-migrate create %s %s' % (repos_path, repos_name))
 +        result = self.env.run('sqlalchemy-migrate drop_version_control %s %s' % (self.url, repos_path), expect_error=True)
 +        result = self.env.run('sqlalchemy-migrate version_control %s %s' % (self.url, repos_path))
-         self.assertEquals(self.run_version(repos_path), 0)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)
+         self.assertEqual(self.run_version(repos_path), 0)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)
  
          # Setup helper script.
 -        result = self.env.run('migrate manage %s --repository=%s --url=%s --model=%s'\
@@ -406,7 +406,7 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
              % (self.url, repos_path, model_module))
          self.assert_("tables missing from database: tmp_account_rundiffs" in result.stdout)
  
-@@ -487,7 +487,7 @@ class TestShellDatabase(Shell, DB):
+@@ -486,7 +486,7 @@
          else:
              warnings = None
          self.env.environ['PYTHONWARNINGS'] = 'default'
@@ -415,15 +415,15 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
              % (self.url, repos_path, model_module.replace(":", ".")), expect_error=True)
          if warnings == None:
              del(self.env.environ['PYTHONWARNINGS'])
-@@ -499,19 +499,19 @@ class TestShellDatabase(Shell, DB):
+@@ -498,19 +498,19 @@
          self.assert_("tables missing from database: tmp_account_rundiffs" in result.stdout)
  
          # Update db to latest model.
 -        result = self.env.run('migrate update_db_from_model %s %s %s'\
 +        result = self.env.run('sqlalchemy-migrate update_db_from_model %s %s %s'\
              % (self.url, repos_path, model_module))
-         self.assertEquals(self.run_version(repos_path), 0)
-         self.assertEquals(self.run_db_version(self.url, repos_path), 0)  # version did not get bumped yet because new version not yet created
+         self.assertEqual(self.run_version(repos_path), 0)
+         self.assertEqual(self.run_db_version(self.url, repos_path), 0)  # version did not get bumped yet because new version not yet created
  
 -        result = self.env.run('migrate compare_model_to_db %s %s %s'\
 +        result = self.env.run('sqlalchemy-migrate compare_model_to_db %s %s %s'\
@@ -440,7 +440,7 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
          temp_dict = dict()
          exec result.stdout in temp_dict
  
-@@ -525,10 +525,10 @@ class TestShellDatabase(Shell, DB):
+@@ -524,10 +524,10 @@
    ##Column('passwd', String(length=None, convert_unicode=False, assert_unicode=None))""" in result.stdout)
  
          ## We're happy with db changes, make first db upgrade script to go from version 0 -> 1.
@@ -451,9 +451,9 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
 -        #result_script = self.env.run('migrate make_update_script_for_model %s %s %s %s'\
 +        #result_script = self.env.run('sqlalchemy-migrate make_update_script_for_model %s %s %s %s'\
              #% (self.url, repos_path, old_model_module, model_module))
-         #self.assertEqualsIgnoreWhitespace(result_script.stdout,
+         #self.assertEqualIgnoreWhitespace(result_script.stdout,
          #'''from sqlalchemy import *
-@@ -555,11 +555,11 @@ class TestShellDatabase(Shell, DB):
+@@ -554,11 +554,11 @@
              #tmp_account_rundiffs.drop()''')
      
          ## Save the upgrade script.
@@ -467,17 +467,17 @@ diff -up sqlalchemy-migrate-0.7.2/migrate/tests/versioning/test_shell.py.rename 
              #% (self.url, repos_path, model_module))
          #self.assert_("No schema diffs" in result.stdout)
  
-diff -up sqlalchemy-migrate-0.7.2/setup.py.rename sqlalchemy-migrate-0.7.2/setup.py
---- sqlalchemy-migrate-0.7.2/setup.py.rename	2011-11-01 21:22:44.000000000 +0100
-+++ sqlalchemy-migrate-0.7.2/setup.py	2011-11-08 15:53:44.300081034 +0100
-@@ -32,8 +32,8 @@ setup(
-     license = "MIT",
-     entry_points = """
-     [console_scripts]
--    migrate = migrate.versioning.shell:main
--    migrate-repository = migrate.versioning.migrate_repository:main
-+    sqlalchemy-migrate = migrate.versioning.shell:main
-+    sqlalchemy-migrate-repository = migrate.versioning.migrate_repository:main
-     """,
-     test_suite = "nose.collector",
- )
+diff -Naur sqlalchemy-migrate-0.8.2.orig/setup.cfg sqlalchemy-migrate-0.8.2/setup.cfg
+--- sqlalchemy-migrate-0.8.2.orig/setup.cfg	2013-11-15 18:37:30.000000000 +0000
++++ sqlalchemy-migrate-0.8.2/setup.cfg	2013-12-19 13:09:24.184242821 +0000
+@@ -23,8 +23,8 @@
+ 
+ [entry_points]
+ console_scripts = 
+-	migrate = migrate.versioning.shell:main
+-	migrate-repository = migrate.versioning.migrate_repository:main
++	sqlalchemy-migrate = migrate.versioning.shell:main
++	sqlalchemy-migrate-repository = migrate.versioning.migrate_repository:main
+ 
+ [build_sphinx]
+ all_files = 1

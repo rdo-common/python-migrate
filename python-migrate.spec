@@ -5,23 +5,18 @@
 %global srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.7.2
-Release: 9%{?dist}
+Version: 0.8.2
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
 License: MIT
-URL: http://code.google.com/p/%{srcname}/
-Source0: http://%{srcname}.googlecode.com/files/%{srcname}-%{version}.tar.gz
-# TODO: Update source from https://github.com/stackforge/sqlalchemy-migrate when tagged
+URL: https://github.com/stackforge/%{srcname}
+Source0: http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 # Patch to update to new scripttest API submitted upstream
 Patch0: migrate-scripttest-update.patch
 # Patch to fix a unittest on python-2.7
 Patch1: migrate-py27.patch
-# Patch to fix a unittest failure on newer python
-Patch2: migrate-test-int-overflow.patch
-# Patch to make compat with sqlalchemy >= 0.8
-Patch3: python-migrate-sqlalchemy-0.8.patch
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
 Patch100: python-migrate-sqlalchemy-migrate.patch
 
@@ -63,8 +58,6 @@ database change sets and database repository versioning.
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .test
 %patch1 -p1 -b .py27
-%patch2 -p1 -b .pynew
-%patch3 -p1 -b .sql0.8
 %patch100 -p1 -b .rename
 
 # use real unittest in python 2.7 and up
@@ -98,11 +91,14 @@ nosetests
 
 %files
 %defattr(-,root,root,-)
-%doc README docs/
+%doc README.rst doc/
 %{_bindir}/*
 %{python_sitelib}/*
 
 %changelog
+* Mon Dec 16 2013 Pádraig Brady <pbrady@redhat.com> - 0.8.2-1
+- Latest upstream
+
 * Mon Sep 23 2013 Pádraig Brady <pbrady@redhat.com> - 0.7.2-9
 - improve sqlalchemy 0.8 compatibility
 

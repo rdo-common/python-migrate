@@ -30,9 +30,11 @@ BuildRequires: python-nose
 BuildRequires: python-sphinx
 BuildRequires: python-decorator
 BuildRequires: python-tempita
+BuildRequires: python-pbr
 
 # for testsuite
 BuildRequires: python-scripttest
+BuildRequires: python-testtools
 
 Requires: python-sqlalchemy
 Requires: python-setuptools

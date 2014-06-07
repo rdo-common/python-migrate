@@ -6,7 +6,7 @@
 
 Name: python-migrate
 Version: 0.9
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -98,6 +98,9 @@ nosetests
 %{python_sitelib}/*
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Sat Mar 08 2014 Pádraig Brady <pbrady@redhat.com> - 0.9-1
 - Latest upstream
 

@@ -5,8 +5,8 @@
 %global srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.9
-Release: 2%{?dist}
+Version: 0.9.1
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -31,6 +31,7 @@ BuildRequires: python-sphinx
 BuildRequires: python-decorator
 BuildRequires: python-tempita
 BuildRequires: python-pbr
+BuildRequires: python-six
 
 # for testsuite
 BuildRequires: python-scripttest
@@ -40,6 +41,7 @@ Requires: python-sqlalchemy
 Requires: python-setuptools
 Requires: python-decorator
 Requires: python-tempita
+Requires: python-six
 
 %if 0%{?rhel} && 0%{?rhel} < 6
 BuildRequires: python-sqlite2
@@ -98,6 +100,9 @@ nosetests
 %{python_sitelib}/*
 
 %changelog
+* Fri Jun 13 2014 Pádraig Brady <pbrady@redhat.com> - 0.9.1-1
+- Latest upstream
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 

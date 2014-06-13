@@ -3,7 +3,7 @@ Index: sqlalchemy-migrate-0.7.1/migrate/tests/versioning/test_shell.py
 --- sqlalchemy-migrate-0.7.1.orig/migrate/tests/versioning/test_shell.py
 +++ sqlalchemy-migrate-0.7.1/migrate/tests/versioning/test_shell.py
 @@ -482,8 +482,18 @@ class TestShellDatabase(Shell, DB):
-         self.assert_("tables missing from database: tmp_account_rundiffs" in result.stdout)
+         self.assertTrue("tables missing from database: tmp_account_rundiffs" in result.stdout)
  
          # Test Deprecation
 +        if 'PYTHONWARNINGS' in self.env.environ:
@@ -20,4 +20,4 @@ Index: sqlalchemy-migrate-0.7.1/migrate/tests/versioning/test_shell.py
 +
          self.assertEqual(result.returncode, 0)
          self.assertTrue("DeprecationWarning" in result.stderr)
-         self.assert_("tables missing from database: tmp_account_rundiffs" in result.stdout)
+         self.assertTrue("tables missing from database: tmp_account_rundiffs" in result.stdout)

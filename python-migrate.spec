@@ -5,7 +5,7 @@
 %global srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.9.1
+Version: 0.9.2
 Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
@@ -35,7 +35,7 @@ BuildRequires: python-six
 
 # for testsuite
 BuildRequires: python-scripttest
-BuildRequires: python-testtools
+BuildRequires: python-testtools < 0.9.36
 
 Requires: python-sqlalchemy
 Requires: python-setuptools
@@ -100,6 +100,9 @@ nosetests
 %{python_sitelib}/*
 
 %changelog
+* Thu Sep 18 2014 Pádraig Brady <pbrady@redhat.com> - 0.9.2-1
+- Latest upstream
+
 * Fri Jun 13 2014 Pádraig Brady <pbrady@redhat.com> - 0.9.1-1
 - Latest upstream
 

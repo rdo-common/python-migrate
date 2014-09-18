@@ -32,6 +32,7 @@ BuildRequires: python-decorator
 BuildRequires: python-tempita
 BuildRequires: python-pbr
 BuildRequires: python-six
+BuildRequires: python-sqlparse
 
 # for testsuite
 BuildRequires: python-scripttest
@@ -42,6 +43,7 @@ Requires: python-setuptools
 Requires: python-decorator
 Requires: python-tempita
 Requires: python-six
+Requires: python-sqlparse
 
 %if 0%{?rhel} && 0%{?rhel} < 6
 BuildRequires: python-sqlite2

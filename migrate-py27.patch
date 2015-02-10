@@ -19,5 +19,5 @@ Index: sqlalchemy-migrate-0.7.1/migrate/tests/versioning/test_shell.py
 +            self.env.environ['PYTHONWARNINGS'] = warnings
 +
          self.assertEqual(result.returncode, 0)
-         self.assertTrue("DeprecationWarning" in result.stderr)
          self.assertTrue("tables missing from database: tmp_account_rundiffs" in result.stdout)
+ 

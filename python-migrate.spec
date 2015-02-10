@@ -5,8 +5,8 @@
 %global srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.9.2
-Release: 2%{?dist}
+Version: 0.9.4
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 Group: Development/Languages
@@ -104,6 +104,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %{python_sitelib}/*
 
 %changelog
+* Tue Feb 10 2015 Pádraig Brady <pbrady@redhat.com> - 0.9.4-1
+- Latest upstream
+
 * Wed Nov 19 2014 Pádraig Brady <pbrady@redhat.com> - 0.9.2-2
 - build: remove cap on testtools for the moment
 

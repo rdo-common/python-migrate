@@ -5,7 +5,7 @@
 %global srcname sqlalchemy-migrate
 
 Name: python-migrate
-Version: 0.9.4
+Version: 0.9.5
 Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
@@ -13,10 +13,6 @@ Group: Development/Languages
 License: MIT
 URL: https://github.com/stackforge/%{srcname}
 Source0: http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
-# Patch to avoid DB2 tests until ibm_db_sa python module is available
-Patch0: no-db2-tests.patch
-# Patch to fix a unittest on python-2.7
-Patch1: migrate-py27.patch
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
 Patch100: python-migrate-sqlalchemy-migrate.patch
 
@@ -62,8 +58,6 @@ database change sets and database repository versioning.
 
 %prep
 %setup -q -n %{srcname}-%{version}
-%patch0 -p1 -b .db2
-%patch1 -p1 -b .py27
 %patch100 -p1 -b .rename
 
 # use real unittest in python 2.7 and up
@@ -104,6 +98,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %{python_sitelib}/*
 
 %changelog
+* Tue Mar 31 2015 Pádraig Brady <pbrady@redhat.com> - 0.9.5-1
+- Latest upstream
+
 * Tue Feb 10 2015 Pádraig Brady <pbrady@redhat.com> - 0.9.4-1
 - Latest upstream
 

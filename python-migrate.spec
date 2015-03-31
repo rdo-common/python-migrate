@@ -1,7 +1,3 @@
-%if !(0%{?fedora} > 12 || 0%{?rhel} > 5)
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-%endif
-
 %global srcname sqlalchemy-migrate
 
 Name: python-migrate
@@ -68,14 +64,10 @@ sed -i "s/import unittest2/import unittest as unittest2/g" \
 %endif
 
 %build
-%{__python} setup.py build
+%{__python2} setup.py build
 
 %install
-%{__rm} -rf %{buildroot}
-%{__python} setup.py install --skip-build --root %{buildroot}
-
-%clean
-%{__rm} -rf %{buildroot}
+%{__python2} setup.py install --skip-build --root %{buildroot}
 
 %check
 # Need to set PATH for two reasons:
@@ -92,10 +84,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 #nosetests
 
 %files
-%defattr(-,root,root,-)
 %doc README.rst doc/
 %{_bindir}/*
-%{python_sitelib}/*
+%{python2_sitelib}/*
 
 %changelog
 * Tue Mar 31 2015 Pádraig Brady <pbrady@redhat.com> - 0.9.5-1

@@ -1,46 +1,44 @@
 %global srcname sqlalchemy-migrate
+%{!?python2_shortver: %global python2_shortver %(%{__python2} -c 'import sys; print(str(sys.version_info.major) + "." + str(sys.version_info.minor))')}
+
+%if 0%{fedora}
+%global with_python3 1
+%{!?python3_shortver: %global python3_shortver %(%{__python3} -c 'import sys; print(str(sys.version_info.major) + "." + str(sys.version_info.minor))')}
+%endif
 
 Name: python-migrate
-Version: 0.9.6
-Release: 2%{?dist}
+Version: 0.10.0
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
-Group: Development/Languages
 License: MIT
-URL: https://github.com/stackforge/%{srcname}
+URL: https://github.com/openstack/%{srcname}
 Source0: http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
 Patch100: python-migrate-sqlalchemy-migrate.patch
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
 BuildArch: noarch
 BuildRequires: python2-devel
-BuildRequires: python-sqlalchemy
+BuildRequires: python-sqlalchemy >= 0.7.8
 BuildRequires: python-setuptools
 BuildRequires: python-nose
 BuildRequires: python-sphinx
 BuildRequires: python-decorator
-BuildRequires: python-tempita
-BuildRequires: python-pbr
-BuildRequires: python-six
+BuildRequires: python-tempita >= 0.4
+BuildRequires: python-pbr >= 1.3.0
+BuildRequires: python-six >= 1.9.0
 BuildRequires: python-sqlparse
 
 # for testsuite
 BuildRequires: python-scripttest
 BuildRequires: python-testtools
 
-Requires: python-sqlalchemy
+Requires: python-sqlalchemy >= 0.7.8
 Requires: python-setuptools
 Requires: python-decorator
-Requires: python-tempita
-Requires: python-six
+Requires: python-tempita >= 0.4
+Requires: python-six >= 1.9.0
 Requires: python-sqlparse
-
-%if 0%{?rhel} && 0%{?rhel} < 6
-BuildRequires: python-sqlite2
-Requires:      python-sqlite2
-%endif
 
 %if 0%{?rhel} && 0%{?rhel} < 7
 BuildRequires: python-unittest2
@@ -51,6 +49,28 @@ Schema migration tools for SQLAlchemy designed to support an agile approach
 to database design and make it easier to keep development and production
 databases in sync as schema changes are required.  It allows you to manage
 database change sets and database repository versioning.
+
+%if 0%{?with_python3}
+%package -n     python3-migrate
+Summary: Schema migration tools for SQLAlchemy
+
+BuildRequires: python3-devel
+BuildRequires: python3-sqlalchemy >= 0.7.8
+BuildRequires: python3-setuptools
+BuildRequires: python3-nose
+BuildRequires: python3-sphinx
+BuildRequires: python3-decorator
+BuildRequires: python3-tempita >= 0.4
+BuildRequires: python3-pbr >= 1.3.0
+BuildRequires: python3-six >= 1.9.0
+BuildRequires: python3-sqlparse
+
+%description -n python3-migrate
+Schema migration tools for SQLAlchemy designed to support an agile approach
+to database design and make it easier to keep development and production
+databases in sync as schema changes are required.  It allows you to manage
+database change sets and database repository versioning.
+%endif
 
 %prep
 %setup -q -n %{srcname}-%{version}
@@ -64,10 +84,34 @@ sed -i "s/import unittest2/import unittest as unittest2/g" \
 %endif
 
 %build
-%{__python2} setup.py build
+%py2_build
+%if 0%{?with_python3}
+%py3_build
+%endif
 
 %install
-%{__python2} setup.py install --skip-build --root %{buildroot}
+%if 0%{?with_python3}
+%py3_install
+for bin in sqlalchemy-migrate{,-repository}; do
+  mv %{buildroot}/%{_bindir}/$bin %{buildroot}/%{_bindir}/python3-$bin
+done
+%endif
+%py2_install
+
+# rename binaries, make compat symlinks
+pushd %{buildroot}%{_bindir}
+for bin in sqlalchemy-migrate{,-repository}; do
+    ln -s $bin $bin-2
+    ln -s $bin $bin-%{python2_shortver}
+done
+
+%if 0%{?with_python3}
+for bin in sqlalchemy-migrate{,-repository}; do
+    ln -s python3-$bin $bin-3
+    ln -s python3-$bin $bin-%{python3_shortver}
+done
+%endif
+popd 
 
 %check
 # Need to set PATH for two reasons:
@@ -85,10 +129,27 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 
 %files
 %doc README.rst doc/
-%{_bindir}/*
+%{_bindir}/sqlalchemy-migrate
+%{_bindir}/sqlalchemy-migrate-repository
+%{_bindir}/sqlalchemy-migrate-2*
+%{_bindir}/sqlalchemy-migrate-repository-2*
 %{python2_sitelib}/*
+ 
+%if 0%{?with_python3}
+%files -n python3-migrate
+%doc README.rst doc/
+%{_bindir}/python3-sqlalchemy-migrate
+%{_bindir}/python3-sqlalchemy-migrate-repository
+%{_bindir}/sqlalchemy-migrate-3*
+%{_bindir}/sqlalchemy-migrate-repository-3*
+%{python3_sitelib}/*
+%endif
 
 %changelog
+* Fri Dec 18 2015 Haïkel Guémar <hguemar@fedoraproject.org> - 0.10.0-1
+- Upstream 0.10.0
+- Add python3 subpackage
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 

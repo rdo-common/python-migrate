@@ -8,7 +8,7 @@
 
 Name: python-migrate
 Version: 0.10.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 License: MIT
@@ -146,6 +146,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %endif
 
 %changelog
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.10.0-3
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.10.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 

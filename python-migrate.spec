@@ -7,13 +7,13 @@
 %endif
 
 Name: python-migrate
-Version: 0.10.0
-Release: 5%{?dist}
+Version: 0.11.0
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 License: MIT
 URL: https://github.com/openstack/%{srcname}
-Source0: http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
+Source0: https://pypi.io/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 # Local patch to rename /usr/bin/migrate to sqlalchemy-migrate
 Patch100: python-migrate-sqlalchemy-migrate.patch
 
@@ -146,6 +146,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %endif
 
 %changelog
+* Fri Apr  7 2017 Haïkel Guémar <hguemar@fedoraproject.org> - 0.11.0-1
+- Upstream 0.11.0 (required due to pbr bump)
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.10.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 

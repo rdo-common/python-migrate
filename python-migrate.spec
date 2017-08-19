@@ -8,7 +8,7 @@
 
 Name: python-migrate
 Version: 0.11.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 License: MIT
@@ -33,22 +33,29 @@ BuildRequires: python-sqlparse
 BuildRequires: python-scripttest
 BuildRequires: python-testtools
 
+%if 0%{?rhel} && 0%{?rhel} < 7
+BuildRequires: python-unittest2
+%endif
+
+%global _description\
+Schema migration tools for SQLAlchemy designed to support an agile approach\
+to database design and make it easier to keep development and production\
+databases in sync as schema changes are required.  It allows you to manage\
+database change sets and database repository versioning.
+
+%description %_description
+
+%package -n python2-migrate
+Summary: %summary
 Requires: python-sqlalchemy >= 0.7.8
 Requires: python-setuptools
 Requires: python-decorator
 Requires: python-tempita >= 0.4
 Requires: python-six >= 1.9.0
 Requires: python-sqlparse
+%{?python_provide:%python_provide python2-migrate}
 
-%if 0%{?rhel} && 0%{?rhel} < 7
-BuildRequires: python-unittest2
-%endif
-
-%description
-Schema migration tools for SQLAlchemy designed to support an agile approach
-to database design and make it easier to keep development and production
-databases in sync as schema changes are required.  It allows you to manage
-database change sets and database repository versioning.
+%description -n python2-migrate %_description
 
 %if 0%{?with_python3}
 %package -n     python3-migrate
@@ -127,7 +134,7 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 # Disable temporarily until tests are adjusted to support testtools >= 0.9.36
 #nosetests
 
-%files
+%files -n python2-migrate
 %doc README.rst doc/
 %{_bindir}/sqlalchemy-migrate
 %{_bindir}/sqlalchemy-migrate-repository
@@ -146,6 +153,10 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %endif
 
 %changelog
+* Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 0.11.0-3
+- Python 2 binary package renamed to python2-migrate
+  See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.11.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 

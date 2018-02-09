@@ -8,7 +8,7 @@
 
 Name: python-migrate
 Version: 0.11.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 License: MIT
@@ -51,6 +51,7 @@ Requires: python-sqlalchemy >= 0.7.8
 Requires: python-setuptools
 Requires: python-decorator
 Requires: python-tempita >= 0.4
+Requires: python-pbr >= 1.3.0
 Requires: python-six >= 1.9.0
 Requires: python-sqlparse
 %{?python_provide:%python_provide python2-migrate}
@@ -153,6 +154,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %endif
 
 %changelog
+* Fri Feb 09 2018 Neal Gompa <ngompa@datto.com> - 0.11.0-5
+- Add missing pbr dependency for Python 2 subpackage
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.11.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 

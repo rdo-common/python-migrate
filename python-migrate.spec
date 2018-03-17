@@ -8,7 +8,7 @@
 
 Name: python-migrate
 Version: 0.11.0
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 License: MIT
@@ -19,19 +19,19 @@ Patch100: python-migrate-sqlalchemy-migrate.patch
 
 BuildArch: noarch
 BuildRequires: python2-devel
-BuildRequires: python-sqlalchemy >= 0.7.8
-BuildRequires: python-setuptools
-BuildRequires: python-nose
-BuildRequires: python-sphinx
-BuildRequires: python-decorator
-BuildRequires: python-tempita >= 0.4
-BuildRequires: python-pbr >= 1.3.0
-BuildRequires: python-six >= 1.9.0
-BuildRequires: python-sqlparse
+BuildRequires: python2-sqlalchemy >= 0.7.8
+BuildRequires: python2-setuptools
+BuildRequires: python2-nose
+BuildRequires: python2-sphinx
+BuildRequires: python2-decorator
+BuildRequires: python2-tempita >= 0.4
+BuildRequires: python2-pbr >= 1.3.0
+BuildRequires: python2-six >= 1.9.0
+BuildRequires: python2-sqlparse
 
 # for testsuite
-BuildRequires: python-scripttest
-BuildRequires: python-testtools
+BuildRequires: python2-scripttest
+BuildRequires: python2-testtools
 
 %if 0%{?rhel} && 0%{?rhel} < 7
 BuildRequires: python-unittest2
@@ -47,13 +47,13 @@ database change sets and database repository versioning.
 
 %package -n python2-migrate
 Summary: %summary
-Requires: python-sqlalchemy >= 0.7.8
-Requires: python-setuptools
-Requires: python-decorator
-Requires: python-tempita >= 0.4
-Requires: python-pbr >= 1.3.0
-Requires: python-six >= 1.9.0
-Requires: python-sqlparse
+Requires: python2-sqlalchemy >= 0.7.8
+Requires: python2-setuptools
+Requires: python2-decorator
+Requires: python2-tempita >= 0.4
+Requires: python2-pbr >= 1.3.0
+Requires: python2-six >= 1.9.0
+Requires: python2-sqlparse
 %{?python_provide:%python_provide python2-migrate}
 
 %description -n python2-migrate %_description
@@ -154,6 +154,10 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %endif
 
 %changelog
+* Sat Mar 17 2018 Iryna Shcherbina <ishcherb@redhat.com> - 0.11.0-6
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Fri Feb 09 2018 Neal Gompa <ngompa@datto.com> - 0.11.0-5
 - Add missing pbr dependency for Python 2 subpackage
 

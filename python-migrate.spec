@@ -8,7 +8,7 @@
 
 Name: python-migrate
 Version: 0.11.0
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 License: MIT
@@ -72,6 +72,14 @@ BuildRequires: python3-tempita >= 0.4
 BuildRequires: python3-pbr >= 1.3.0
 BuildRequires: python3-six >= 1.9.0
 BuildRequires: python3-sqlparse
+
+Requires: python3-sqlalchemy >= 0.7.8
+Requires: python3-setuptools
+Requires: python3-decorator
+Requires: python3-tempita >= 0.4
+Requires: python3-pbr >= 1.3.0
+Requires: python3-six >= 1.9.0
+Requires: python3-sqlparse
 
 %description -n python3-migrate
 Schema migration tools for SQLAlchemy designed to support an agile approach
@@ -154,6 +162,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %endif
 
 %changelog
+* Mon May 14 2018 Yatin Karel <ykarel@redhat.com> - 0.11.0-7
+- Add python3 Requires
+
 * Sat Mar 17 2018 Iryna Shcherbina <ishcherb@redhat.com> - 0.11.0-6
 - Update Python 2 dependency declarations to new packaging standards
   (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)

@@ -8,7 +8,7 @@
 
 Name: python-migrate
 Version: 0.11.0
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 License: MIT
@@ -162,6 +162,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %endif
 
 %changelog
+* Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 0.11.0-8
+- Rebuilt for Python 3.7
+
 * Mon May 14 2018 Yatin Karel <ykarel@redhat.com> - 0.11.0-7
 - Add python3 Requires
 

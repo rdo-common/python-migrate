@@ -1,14 +1,14 @@
 %global srcname sqlalchemy-migrate
 %{!?python2_shortver: %global python2_shortver %(%{__python2} -c 'import sys; print(str(sys.version_info.major) + "." + str(sys.version_info.minor))')}
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} > 7
 %global with_python3 1
 %{!?python3_shortver: %global python3_shortver %(%{__python3} -c 'import sys; print(str(sys.version_info.major) + "." + str(sys.version_info.minor))')}
 %endif
 
 Name: python-migrate
 Version: 0.12.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 License: MIT
@@ -177,6 +177,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %endif
 
 %changelog
+* Tue Jan 29 2019 Alfredo Moralejo <amoralej@redhat.com> - 0.12.0-2
+- Fix conditional for RHEL8.
+
 * Tue Jan 29 2019 Alfredo Moralejo <amoralej@redhat.com> - 0.12.0-1
 - Update to 0.12.0.
 

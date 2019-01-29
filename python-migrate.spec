@@ -7,8 +7,8 @@
 %endif
 
 Name: python-migrate
-Version: 0.11.0
-Release: 9%{?dist}
+Version: 0.12.0
+Release: 1%{?dist}
 Summary: Schema migration tools for SQLAlchemy
 
 License: MIT
@@ -19,19 +19,27 @@ Patch100: python-migrate-sqlalchemy-migrate.patch
 
 BuildArch: noarch
 BuildRequires: python2-devel
-BuildRequires: python2-sqlalchemy >= 0.7.8
+BuildRequires: python2-sqlalchemy >= 0.9.6
 BuildRequires: python2-setuptools
 BuildRequires: python2-nose
 BuildRequires: python2-sphinx
-BuildRequires: python2-decorator
-BuildRequires: python2-tempita >= 0.4
 BuildRequires: python2-pbr >= 1.3.0
 BuildRequires: python2-six >= 1.9.0
-BuildRequires: python2-sqlparse
 
 # for testsuite
-BuildRequires: python2-scripttest
 BuildRequires: python2-testtools
+
+%if 0%{?rhel} && 0%{?rhel} <= 7
+BuildRequires: python-scripttest
+BuildRequires: python-decorator
+BuildRequires: python-tempita >= 0.4
+BuildRequires: python-sqlparse
+%else
+BuildRequires: python2-scripttest
+BuildRequires: python2-decorator
+BuildRequires: python2-tempita >= 0.4
+BuildRequires: python2-sqlparse
+%endif
 
 %if 0%{?rhel} && 0%{?rhel} < 7
 BuildRequires: python-unittest2
@@ -47,14 +55,21 @@ database change sets and database repository versioning.
 
 %package -n python2-migrate
 Summary: %summary
-Requires: python2-sqlalchemy >= 0.7.8
+Requires: python2-sqlalchemy >= 0.9.6
 Requires: python2-setuptools
-Requires: python2-decorator
-Requires: python2-tempita >= 0.4
 Requires: python2-pbr >= 1.3.0
 Requires: python2-six >= 1.9.0
-Requires: python2-sqlparse
 %{?python_provide:%python_provide python2-migrate}
+
+%if 0%{?rhel} && 0%{?rhel} <= 7
+Requires: python-decorator
+Requires: python-tempita >= 0.4
+Requires: python-sqlparse
+%else
+Requires: python2-decorator
+Requires: python2-tempita >= 0.4
+Requires: python2-sqlparse
+%endif
 
 %description -n python2-migrate %_description
 
@@ -63,7 +78,7 @@ Requires: python2-sqlparse
 Summary: Schema migration tools for SQLAlchemy
 
 BuildRequires: python3-devel
-BuildRequires: python3-sqlalchemy >= 0.7.8
+BuildRequires: python3-sqlalchemy >= 0.9.6
 BuildRequires: python3-setuptools
 BuildRequires: python3-nose
 BuildRequires: python3-sphinx
@@ -73,7 +88,7 @@ BuildRequires: python3-pbr >= 1.3.0
 BuildRequires: python3-six >= 1.9.0
 BuildRequires: python3-sqlparse
 
-Requires: python3-sqlalchemy >= 0.7.8
+Requires: python3-sqlalchemy >= 0.9.6
 Requires: python3-setuptools
 Requires: python3-decorator
 Requires: python3-tempita >= 0.4
@@ -162,6 +177,9 @@ echo 'sqlite:///__tmp__' > test_db.cfg
 %endif
 
 %changelog
+* Tue Jan 29 2019 Alfredo Moralejo <amoralej@redhat.com> - 0.12.0-1
+- Update to 0.12.0.
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.11.0-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
